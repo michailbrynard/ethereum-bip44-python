@@ -17,7 +17,7 @@ from two1.crypto.ecdsa import secp256k1
 
 bitcoin_curve = secp256k1()
 
-from rlp.utils import encode_hex
+from eth_utils import encode_hex
 
 from Crypto.Hash import keccak
 sha3_256 = lambda x: keccak.new(digest_bits=256, data=x)
@@ -721,24 +721,18 @@ class PublicKey(PublicKeyBase):
         """
         return self.ripe_compressed if compressed else self.ripe
 
-    def address(self, compressed=True, testnet=False):
+    def address(self, compressed=True):
         """ Address property that returns the Base58Check
         encoded version of the HASH160.
 
         Args:
             compressed (bool): Whether or not the compressed key should
                be used.
-            testnet (bool): Whether or not the key is intended for testnet
-               usage. False indicates mainnet usage.
 
         Returns:
             bytes: Base58Check encoded string
         """
-        version = '0x'
-        return version + encode_hex(self.keccak[12:])
-        # Put the version byte in front, 0x00 for Mainnet, 0x6F for testnet
-        # version = bytes([self.TESTNET_VERSION]) if testnet else bytes([self.MAINNET_VERSION])
-        # return base58.b58encode_check(version + self.hash160(compressed))
+        return encode_hex(self.keccak[12:])
 
     def verify(self, message, signature, do_hash=True):
         """ Verifies that message was appropriately signed.
@@ -1600,7 +1594,7 @@ class HDPublicKey(HDKey, PublicKeyBase):
         Returns:
             bytes: Base58Check encoded string
         """
-        return self._key.address(True, testnet)
+        return self._key.address(True)
 
     def verify(self, message, signature, do_hash=True):
         """ Verifies that message was appropriately signed.
