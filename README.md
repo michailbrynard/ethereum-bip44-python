@@ -52,6 +52,12 @@ keys = HDKey.from_path(acct_pub_key,'{change}/{index}'.format(change=0, index=0)
 address = keys[-1].address()
 print('Account address: ' + address)
 ```
+### Get 64 Character Private Key from XPRIV
+```
+print(Private key (hex): " + private_key._key.to_hex())
+
+```
+
 
 
 
